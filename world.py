@@ -1,34 +1,26 @@
 import collections
 import random
 
-import ai
-import gameobjects
+import actor_factory
 
 
 class World:
     def __init__(self):
         self.map = None
         self.actors = list()
+        self.actor_factory = actor_factory.ActorFactory(self)
 
     def initialize_map(self, size_x=60, size_y=20, num_actors=10):
         # TODO: Move to map factory
         self.map = Map(size_x, size_y)
+        self.actors = self.actor_factory.generate_actors(num_actors)
+        self.place_actors()
 
-        # TODO: Move to actor factory
-        # Must be after map for now
-        self.generate_actors(num_actors)
-
-    def generate_actors(self, number):
-        for i in range(number):
-            # TODO: Move to actor factory
-            actor = gameobjects.Actor(
-                random.choice('spTrXz'),
-                self,
-                random.randint(0, self.map.size_x - 1),
-                random.randint(0, self.map.size_y - 1),
-                ai.RandomBrain()
-            )
-            self.actors.append(actor)
+    def place_actors(self):
+        for actor in self.actors:
+            x = random.randint(0, self.map.size_x - 1)
+            y = random.randint(0, self.map.size_y - 1)
+            actor.place(x, y)
 
     def on_map(self, x, y):
         return (0 <= x < self.map.size_x) and (0 <= y < self.map.size_y)
@@ -77,4 +69,3 @@ class Map(collections.UserList):
             for x in range(self.size_x):
                 row.append(Tile('.', x, y))
             self.append(row)
-
