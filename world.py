@@ -1,3 +1,4 @@
+import collections
 import random
 
 import ai
@@ -9,30 +10,28 @@ class World:
         self.map = None
         self.actors = list()
 
-    def initialize_map(self, size_x=60, size_y=20):
+    def initialize_map(self, size_x=60, size_y=20, num_actors=10):
         # TODO: Move to map factory
-        self.map = list()
-
-        for y in range(size_y):
-            row = list()
-            for x in range(size_x):
-                row.append(Tile('.', x, y))
-            self.map.append(row)
+        self.map = Map(size_x, size_y)
 
         # TODO: Move to actor factory
-        for i in range(10):
-            self.actors.append(
-                gameobjects.Actor(
-                    random.choice('spTrXz'),
-                    self,
-                    random.randint(0, size_x - 1),
-                    random.randint(0, size_y - 1),
-                    ai.RandomBrain()
-                )
+        # Must be after map for now
+        self.generate_actors(num_actors)
+
+    def generate_actors(self, number):
+        for i in range(number):
+            # TODO: Move to actor factory
+            actor = gameobjects.Actor(
+                random.choice('spTrXz'),
+                self,
+                random.randint(0, self.map.size_x - 1),
+                random.randint(0, self.map.size_y - 1),
+                ai.RandomBrain()
             )
+            self.actors.append(actor)
 
     def on_map(self, x, y):
-        return (0 <= x < len(self.map[0])) and (0 <= y < len(self.map))
+        return (0 <= x < self.map.size_x) and (0 <= y < self.map.size_y)
 
     def walkable(self, x, y):
         return self.map[y][x].walkable
@@ -65,3 +64,17 @@ class Tile:
 
     def draw(self, stdscr):
         stdscr.addch(self.y, self.x, self.base_char)
+
+
+class Map(collections.UserList):
+    def __init__(self, size_x, size_y):
+        super().__init__()
+        self.size_x = size_x
+        self.size_y = size_y
+
+        for y in range(self.size_y):
+            row = list()
+            for x in range(self.size_x):
+                row.append(Tile('.', x, y))
+            self.append(row)
+
