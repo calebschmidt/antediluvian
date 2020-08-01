@@ -15,8 +15,8 @@ class ActorFactory:
             actor = gameobjects.Actor(
                 random.choice('spTrXz'),
                 self,
-                random.randint(0, self.map.size_x - 1),
-                random.randint(0, self.map.size_y - 1),
+                None,
+                None,
                 ai.RandomBrain()
             )
             actors.append(actor)
