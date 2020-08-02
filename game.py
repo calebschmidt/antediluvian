@@ -11,7 +11,7 @@ class Game:
         self.player = player.Player(self.world)
         self.player.place(10, 10)
 
-        self.gui = gui.GUI(self, 80, 25)
+        self.gui = gui.GUI(self, 100, 40)
 
         self.context = list()
         self.key = None
@@ -30,7 +30,7 @@ class Game:
     def initialize(self):
         self.context.append(contexts.MAIN_MENU)
         self.gui.initialize()
-        self.world.initialize_map()
+        self.world.initialize_map(100, 35)
 
     def teardown(self):
         self.gui.teardown()

@@ -28,7 +28,13 @@ class GUI:
         self.stdscr.clear()
 
     def draw(self):
-        self.stdscr.addstr(self.screen_y - 1, 0, 'PLAYER: ({}, {})'.format(self.game.player.window_x, self.game.player.window_y))
+        # Debug player position
+        # TODO: Refactor into draw_debug_gui
+        self.stdscr.addstr(
+            self.screen_y - 1,
+            0,
+            'PLAYER: ({}, {})'.format(self.game.player.window_x, self.game.player.window_y)
+        )
 
     def after_draw(self):
         self.stdscr.refresh()
@@ -42,4 +48,11 @@ class GUI:
 
     def paused(self):
         self.stdscr.addstr(self.screen_y // 2 - 4, self.screen_x // 2 - 3, 'PAUSED')
+
+
+class Message:
+    def __init__(self, msg, life):
+        self.msg = f'*{msg}*'
+        self.life = life
+        # TODO: Finish this
 

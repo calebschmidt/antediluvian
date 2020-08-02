@@ -1,7 +1,7 @@
-import collections
 import random
 
 import actor_factory
+import map_factory
 
 
 class World:
@@ -9,10 +9,10 @@ class World:
         self.map = None
         self.actors = list()
         self.actor_factory = actor_factory.ActorFactory(self)
+        self.map_factory = map_factory.MapFactory(self)
 
     def initialize_map(self, size_x=60, size_y=20, num_actors=10):
-        # TODO: Move to map factory
-        self.map = Map(size_x, size_y)
+        self.map = self.map_factory.generate_map(size_x=size_x, size_y=size_y)
         self.actors = self.actor_factory.generate_actors(num_actors)
         self.place_actors()
 
@@ -45,27 +45,3 @@ class World:
         for actor in self.actors:
             actor.update()
 
-
-class Tile:
-    def __init__(self, base_char, x, y, walkable=True, blocks_sight=False):
-        self.base_char = base_char
-        self.walkable = walkable
-        self.blocks_sight = blocks_sight
-        self.x = x
-        self.y = y
-
-    def draw(self, stdscr):
-        stdscr.addch(self.y, self.x, self.base_char)
-
-
-class Map(collections.UserList):
-    def __init__(self, size_x, size_y):
-        super().__init__()
-        self.size_x = size_x
-        self.size_y = size_y
-
-        for y in range(self.size_y):
-            row = list()
-            for x in range(self.size_x):
-                row.append(Tile('.', x, y))
-            self.append(row)
