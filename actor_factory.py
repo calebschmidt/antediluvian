@@ -14,7 +14,7 @@ class ActorFactory:
             # TODO: Move to actor factory
             actor = gameobjects.Actor(
                 random.choice('spTrXz'),
-                self,
+                self.world,
                 None,
                 None,
                 ai.RandomBrain()
